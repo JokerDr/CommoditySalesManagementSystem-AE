@@ -6,8 +6,17 @@ module.exports = {
     enable: true,
     package: 'egg-validate',
   },
-  // had enabled by egg
-  // static: {
-  //   enable: true,
-  // }
+  mongoose: {
+    enable: true,
+    package: 'egg-mongoose',
+  },
+  bcrypt: {
+    enable: true,
+    package: 'egg-bcrypt',
+  },
+  cors: {
+    enable: true,
+    package: 'egg-cors',
+  },
+
 };
