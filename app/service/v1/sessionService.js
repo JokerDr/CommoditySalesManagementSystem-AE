@@ -2,7 +2,7 @@
 
 const Service = require('egg').Service;
 const { generateToken } = require('../../public/utils/tokenRS256');
-
+const userPower = require('./personnel/employeeService');
 
 class SessionService extends Service {
   // {
@@ -50,17 +50,19 @@ class SessionService extends Service {
         return await Authorization.update(
           { _id: doc._id },
           { remember_token: token }
-        ).then(effectRow => {
+        ).then(async effectRow => {
           if (!effectRow.nModified) {
             const errMsg = `\n token 更新失败， effectRow: {n: ${
               effectRow.n
             }, nModified: ${effectRow.nModified}, ok: ${effectRow.ok}}`;
             return Promise.reject(errMsg);
           }
+          const powersMap = await userPower.show(doc._id);
           return {
             type: doc.account_type,
             email: doc.email,
             token,
+            powersMap,
           };
         });
       })

@@ -6,23 +6,44 @@ const moment = require('moment');
 class InventryService extends Service {
   async index(params) {
     const { Inventry } = this.ctx.model;
-    const { timeType, time } = params;
-    const ti = moment(time);
+    const { timeType, time, tableConf, ...rest } = params;
+    const { current, pageSize } = tableConf;
     const timeMap = {
-      year: ti.year(),
-      month: ti.month(), // 0 -11
-      day: ti.date(),
-      all: ti.format('YYYY-MM-DD'),
+      year: moment(time).year(),
+      month: moment(time).month() + 1, // 0 -11
+      day: moment(time).date(),
     };
-    const timeCondition = timeMap[timeType];
+    const timeConditionType = {
+      year: {
+        curtYear: timeMap.year,
+      },
+      month: {
+        curtYear: timeMap.year,
+        curtMonth: timeMap.month,
+      },
+      day: {
+        curtYear: timeMap.year,
+        curtMonth: timeMap.month,
+        curtDay: timeMap.day,
+      },
+    };
+    const timeCondition = timeConditionType[timeType];
     try {
-      const doc = Inventry.find({});
-      if (!doc) {
-        return 0;
-      }
-      return doc;
+      return Inventry.find(timeCondition, { _id: 0 }).pupulate({
+        path: '_goodsId', // 关联
+        match: {
+          ...rest,
+        }, // 条件
+        select: {
+          // _id: 0,
+        }, // 去掉_id属性，选择name
+        options: {
+          page: current,
+          limit: pageSize,
+        }, // 分页
+      });
     } catch (e) {
-      return 0;
+      return [];
     }
   }
 
@@ -37,6 +58,7 @@ class InventryService extends Service {
     } catch (e) {
       return 0;
     }
+
   }
 
   async show(params) {

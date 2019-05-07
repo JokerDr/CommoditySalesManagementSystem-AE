@@ -2,8 +2,8 @@
 
 const Controller = require('egg').Controller;
 
-class SaleSupplyController extends Controller {
-   // 表单搜索， 返回搜索数据
+class PurShipmentController extends Controller {
+  // 表单搜索， 返回搜索数据
   async index() {
     const indexRule = {
       goodsCategories: {
@@ -26,7 +26,7 @@ class SaleSupplyController extends Controller {
         type: 'string',
         required: false,
       },
-      supplyDate: {
+      shipmentDate: {
         type: 'string',
         required: false,
       },
@@ -37,7 +37,7 @@ class SaleSupplyController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(indexRule, ctx.request.body);
-    const params = !ctx.request.body.tableConf
+    const params = !ctx.request.body.hasOwnProperty('tableConf')
       ? Object.assign(ctx.request.body, {
         tableConf: {
           current: 1,
@@ -45,7 +45,7 @@ class SaleSupplyController extends Controller {
         },
       })
       : ctx.request.body;
-    const res = ctx.service.v1.saleSupplyService.index(params);
+    const res = ctx.service.v1.purchase.purShipmentService.index(params);
     const data = { list: res };
     if (res !== []) {
       ctx.status = 200;
@@ -74,25 +74,19 @@ class SaleSupplyController extends Controller {
       goodsCode: {
         type: 'string',
       },
-      supplyCount: {
+      shipmentCount: {
         type: 'number',
       },
-      supplyPrice: {
+      shipmentPrice: {
         type: 'number',
       },
       totle: {
         type: 'number',
       },
-      paid: {
-        type: 'number',
-      },
-      notPaid: {
-        type: 'number',
-      },
       supplier: {
         type: 'string',
       },
-      supplyDate: {
+      shipmentDate: {
         type: 'string',
       },
       Execcutor: {
@@ -107,7 +101,7 @@ class SaleSupplyController extends Controller {
     ctx.validate(createRule, ctx.request.body);
     // const { ctx } = this;
     const params = ctx.request.body;
-    const res = await ctx.service.v1.saleSupplyService.create(params);
+    const res = await ctx.service.v1.purchase.purShipmentService.create(params);
     const data = { isSuccess: Boolean(res) };
     if (res !== 0) {
       ctx.status = 200;
@@ -131,25 +125,19 @@ class SaleSupplyController extends Controller {
       goodsCode: {
         type: 'string',
       },
-      supplyCount: {
+      shipmentCount: {
         type: 'number',
       },
-      supplyPrice: {
+      shipmentPrice: {
         type: 'number',
       },
       totle: {
         type: 'number',
       },
-      paid: {
-        type: 'number',
-      },
-      notPaid: {
-        type: 'number',
-      },
       supplier: {
         type: 'string',
       },
-      supplyDate: {
+      shipmentDate: {
         type: 'string',
       },
       Execcutor: {
@@ -162,7 +150,7 @@ class SaleSupplyController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(updateRule, ctx.request.body);
-    const res = ctx.service.v1.saleSupplyService.update(ctx.request.body);
+    const res = ctx.service.v1.purchase.purShipmentService.update(ctx.request.body);
     const data = { isSuccess: res };
     if (res !== 0) {
       ctx.status = 200;
@@ -181,7 +169,7 @@ class SaleSupplyController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(destroyRule, ctx.request.body);
-    const res = ctx.service.v1.saleSupplyService.destroy(ctx.request.body);
+    const res = ctx.service.v1.purchase.purShipmentService.destroy(ctx.request.body);
     const data = { isSuccess: Boolean(res) };
     if (res === 1) {
       ctx.status = 201;
@@ -193,4 +181,4 @@ class SaleSupplyController extends Controller {
   }
 }
 
-module.exports = SaleSupplyController;
+module.exports = PurShipmentController;

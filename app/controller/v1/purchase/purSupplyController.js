@@ -37,7 +37,7 @@ class PurSupplyController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(indexRule, ctx.request.body);
-    const params = !ctx.request.body.tableConf
+    const params = !ctx.request.body.hasOwnProperty('tableConf')
       ? Object.assign(ctx.request.body, {
         tableConf: {
           current: 1,
@@ -45,7 +45,7 @@ class PurSupplyController extends Controller {
         },
       })
       : ctx.request.body;
-    const res = ctx.service.v1.purSupplyService.index(params);
+    const res = ctx.service.v1.purchase.purSupplyService.index(params);
     const data = { list: res };
     if (res !== []) {
       ctx.status = 200;
@@ -107,7 +107,7 @@ class PurSupplyController extends Controller {
     ctx.validate(createRule, ctx.request.body);
     // const { ctx } = this;
     const params = ctx.request.body;
-    const res = await ctx.service.v1.purSupplyService.create(params);
+    const res = await ctx.service.v1.purchase.purSupplyService.create(params);
     const data = { isSuccess: Boolean(res) };
     if (res !== 0) {
       ctx.status = 200;
@@ -162,7 +162,7 @@ class PurSupplyController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(updateRule, ctx.request.body);
-    const res = ctx.service.v1.purSupplyService.update(ctx.request.body);
+    const res = ctx.service.v1.purchase.purSupplyService.update(ctx.request.body);
     const data = { isSuccess: res };
     if (res !== 0) {
       ctx.status = 200;
@@ -181,7 +181,7 @@ class PurSupplyController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(destroyRule, ctx.request.body);
-    const res = ctx.service.v1.purSupplyService.destroy(ctx.request.body);
+    const res = ctx.service.v1.purchase.purSupplyService.destroy(ctx.request.body);
     const data = { isSuccess: Boolean(res) };
     if (res === 1) {
       ctx.status = 201;

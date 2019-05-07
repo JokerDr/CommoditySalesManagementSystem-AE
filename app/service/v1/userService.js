@@ -2,7 +2,7 @@
 
 const Service = require('egg').Service;
 const defaultPower = require('../../public/utils/defaultPower');
-
+const userPower = require('./personnel/employeeService');
 
 class UserService extends Service {
 
@@ -26,7 +26,7 @@ class UserService extends Service {
   //   2: 已经注册过，
   // }
   async create(params) {
-    const { User, UserPower, Authorization } = this.ctx.model;
+    const { User, Authorization } = this.ctx.model;
     // 1. captcha check
     // const isCaptcha = params.captcha === this.ctx.session.captchaCode;
     // if (!isCaptcha) { return 0; }
@@ -54,13 +54,9 @@ class UserService extends Service {
             }
           }
         );
-        await new UserPower(
+        await userPower.create(
           Object.assign(defaultPower, { _authorId: doc._id })
-        ).save(err => {
-          if (err) {
-            console.log('------- UserPower 表插入失敗 表插入失敗--------\n', err);
-          }
-        });
+        );
       });
       return 1;
     }

@@ -51,13 +51,18 @@ module.exports = app => {
     },
     // 执行人 (退货人)
     execcutor: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
     note: {
       type: String,
       required: false,
       default: '',
+    },
+    saleSupplyDateQuery: {
+      type: Number,
+      required: true,
+      default: 0,
     },
     _goodsId: {
       type: Schema.Types.ObjectId,

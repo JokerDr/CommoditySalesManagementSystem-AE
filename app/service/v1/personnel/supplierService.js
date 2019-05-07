@@ -2,12 +2,12 @@
 
 const Service = require('egg').Service;
 
-class EnterPriceService extends Service {
+class SupplierService extends Service {
 
   async index() {
-    const { Enterprise } = this.ctx.model;
+    const { Supplier } = this.ctx.model;
     try {
-      const res = await Enterprise.find({}, { _id: 1, name: 1 });
+      const res = await Supplier.find({}, { _id: 1, name: 1 });
       return res;
     } catch (e) {
       throw e;
@@ -17,7 +17,7 @@ class EnterPriceService extends Service {
   // 条件模糊搜索的结果
   async show(params) {
     const { noCondition, condition } = params;
-    const { Enterprise } = this.ctx.model;
+    const { Supplier } = this.ctx.model;
     try {
       const Conditions = noCondition
         ? {}
@@ -28,12 +28,11 @@ class EnterPriceService extends Service {
             companyName: condition,
             phone: condition,
             email: condition,
-            duties: condition,
             qqWechat: condition,
             saleMan: condition,
           },
         };
-      const doc = Enterprise.find(Conditions);
+      const doc = Supplier.find(Conditions);
       if (doc) {
         return doc;
       }
@@ -47,18 +46,18 @@ class EnterPriceService extends Service {
   //   0: failed,
   //   1: SUCCESSED
   async create(params) {
-    const { Enterprise } = this.ctx.model;
+    const { Supplier } = this.ctx.model;
     try {
       const {
         name,
         liner,
         companyName,
       } = params;
-      const doc = await Enterprise.findOne(
+      const doc = await Supplier.findOne(
         { name, liner, companyName }
       );
       if (!doc) {
-        const res = await new Enterprise(params).save();
+        const res = await new Supplier(params).save();
         if (res) { return 1; }
       }
       // 已经存在
@@ -71,10 +70,10 @@ class EnterPriceService extends Service {
 
   // 更新供应商信息
   async update(params) {
-    const { Enterprise } = this.ctx.model;
+    const { Supplier } = this.ctx.model;
     try {
       const { _id, ...res } = params;
-      const result = await Enterprise.update({ _id }, res);
+      const result = await Supplier.update({ _id }, res);
       if (result.nModified === 1) {
         return 1;
       }
@@ -104,4 +103,4 @@ class EnterPriceService extends Service {
 }
 
 
-module.exports = EnterPriceService;
+module.exports = SupplierService;

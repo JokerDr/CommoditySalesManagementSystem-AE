@@ -29,12 +29,7 @@ module.exports = app => {
       required: false,
       default: true,
     },
-    day_sale_stats: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    month_sale_stats: {
+    statistics: {
       type: Boolean,
       required: false,
       default: true,

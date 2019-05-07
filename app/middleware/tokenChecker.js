@@ -33,10 +33,12 @@ module.exports = () => {
       } else {
         // 如果token不合法，则代表客户端token已经过期或者不合法（伪造token）
         const message = '您的登录状态已过期，请重新登录';
+        ctx.status = 401;
         ctx.helper.HandleData(ctx, 2, message, {});
       }
     } else {
       // 如果token为空，则代表客户没有登录
+      ctx.status = 401;
       const message = '您还没有登录，请登陆后再进行操作';
       ctx.helper.HandleData(ctx, 2, message, {});
     }

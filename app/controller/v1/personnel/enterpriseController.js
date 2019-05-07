@@ -2,7 +2,7 @@
 
 const { Controller } = require('egg');
 
-class CustomerController extends Controller {
+class EnterpriseController extends Controller {
 
   // 新增记录
   async create() {
@@ -21,6 +21,10 @@ class CustomerController extends Controller {
         required: true,
       },
       phone: {
+        type: 'number',
+        required: true,
+      },
+      tel: {
         type: 'number',
         required: true,
       },
@@ -52,7 +56,7 @@ class CustomerController extends Controller {
         type: 'string',
         required: true,
       },
-      netAdress: {
+      netAddress: {
         type: 'string',
         required: true,
       },
@@ -69,7 +73,7 @@ class CustomerController extends Controller {
     ctx.validate(createRule, ctx.request.body);
     // const { ctx } = this;
     const params = ctx.request.body;
-    const res = await ctx.service.v1.customerService.create(params);
+    const res = await ctx.service.v1.personnel.enterpriseService.create(params);
     const data = { isSuccess: Boolean(res) };
     if (res !== 0) {
       ctx.status = 200;
@@ -82,14 +86,30 @@ class CustomerController extends Controller {
 
   async show() {
     const showRule = {
+      noCondition: {
+        type: 'boolean',
+        required: true,
+      },
       condition: {
         type: 'number' || 'string',
         required: false,
       },
+      tableConf: {
+        type: 'object',
+        required: false,
+      },
     };
     const { ctx } = this;
+    const params = !ctx.request.body.hasOwnProperty('tableConf')
+      ? Object.assign(ctx.request.body, {
+          tableConf: {
+            current: 1,
+            pageSize: 10,
+          },
+        })
+      : ctx.request.body;
     ctx.validate(showRule, ctx.request.body);
-    const res = ctx.service.v1.customerService.show(ctx.request.body);
+    const res = ctx.service.v1.personnel.enterpriseService.show(params);
     const data = { isSuccess: res };
     if (res !== 0) {
       ctx.status = 200;
@@ -119,6 +139,10 @@ class CustomerController extends Controller {
         type: 'number',
         required: true,
       },
+      tel: {
+        type: 'number',
+        required: true,
+      },
       email: {
         type: 'string',
         required: true,
@@ -147,7 +171,7 @@ class CustomerController extends Controller {
         type: 'string',
         required: true,
       },
-      netAdress: {
+      netAddress: {
         type: 'string',
         required: true,
       },
@@ -162,7 +186,7 @@ class CustomerController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(updateRule, ctx.request.body);
-    const res = ctx.service.v1.customerService.update(ctx.request.body);
+    const res = ctx.service.v1.personnel.enterpriseService.update(ctx.request.body);
     const data = { isSuccess: res };
     if (res !== 0) {
       ctx.status = 200;
@@ -181,7 +205,7 @@ class CustomerController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(destroyRule, ctx.request.body);
-    const res = ctx.service.v1.customerService.destroy(ctx.request.body);
+    const res = ctx.service.v1.personnel.enterpriseService.destroy(ctx.request.body);
     const data = { isSuccess: Boolean(res) };
     if (res === 1) {
       ctx.status = 201;
@@ -191,7 +215,6 @@ class CustomerController extends Controller {
       ctx.helper.HandleData(ctx, 0, 'failed', data);
     }
   }
-
 }
 
-module.exports = CustomerController;
+module.exports = EnterpriseController;

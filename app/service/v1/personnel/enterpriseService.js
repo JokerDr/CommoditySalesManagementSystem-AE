@@ -2,22 +2,12 @@
 
 const Service = require('egg').Service;
 
-class SupplierService extends Service {
-
-  async index() {
-    const { Supplier } = this.ctx.model;
-    try {
-      const res = await Supplier.find({}, { _id: 1, name: 1 });
-      return res;
-    } catch (e) {
-      throw e;
-    }
-  }
+class EnterpriseService extends Service {
 
   // 条件模糊搜索的结果
   async show(params) {
     const { noCondition, condition } = params;
-    const { Supplier } = this.ctx.model;
+    const { Enterprise } = this.ctx.model;
     try {
       const Conditions = noCondition
         ? {}
@@ -33,7 +23,7 @@ class SupplierService extends Service {
             saleMan: condition,
           },
         };
-      const doc = Supplier.find(Conditions);
+      const doc = Enterprise.find(Conditions);
       if (doc) {
         return doc;
       }
@@ -47,18 +37,18 @@ class SupplierService extends Service {
   //   0: failed,
   //   1: SUCCESSED
   async create(params) {
-    const { Supplier } = this.ctx.model;
+    const { Enterprise } = this.ctx.model;
     try {
       const {
         name,
         liner,
         companyName,
       } = params;
-      const doc = await Supplier.findOne(
+      const doc = await Enterprise.findOne(
         { name, liner, companyName }
       );
       if (!doc) {
-        const res = await new Supplier(params).save();
+        const res = await new Enterprise(params).save();
         if (res) { return 1; }
       }
       // 已经存在
@@ -71,10 +61,10 @@ class SupplierService extends Service {
 
   // 更新供应商信息
   async update(params) {
-    const { Supplier } = this.ctx.model;
+    const { Enterprise } = this.ctx.model;
     try {
       const { _id, ...res } = params;
-      const result = await Supplier.update({ _id }, res);
+      const result = await Enterprise.update({ _id }, res);
       if (result.nModified === 1) {
         return 1;
       }
@@ -104,4 +94,4 @@ class SupplierService extends Service {
 }
 
 
-module.exports = SupplierService;
+module.exports = EnterpriseService;

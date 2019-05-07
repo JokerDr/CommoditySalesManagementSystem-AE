@@ -3,11 +3,7 @@
 module.exports = app => {
   const { Schema, model } = app.mongoose;
   // const connect = app.mongooseDB.get('CSMS');
-  const PurchaseSupplySchema = new Schema({
-    // supplyDate: {
-    //   type: String,
-    //   required: true,
-    // },
+  const ProfitSchema = new Schema({
     curtYear: {
       type: Number,
       required: true,
@@ -24,51 +20,35 @@ module.exports = app => {
       type: String,
       required: true,
     },
-    supplyCount: {
-      type: String,
-      required: true,
-    },
-    supplyPrice: {
-      type: String,
-      required: true,
-    },
-    totle: {
-      type: Number,
-      required: true,
-    },
-    paid: {
-      type: Number,
-      required: true,
-    },
-    notPaid: {
-      type: Number,
+    eeProfit: {
       required: false,
+      type: Number,
       default: 0,
     },
-    supplier: {
+    profitDateQuery: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    referId: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    // 操作类型
+    handleType: {
       type: String,
       required: true,
     },
-    // 执行人 (退货人)
+    // name
     execcutor: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-    },
-    note: {
-      type: String,
-      required: false,
-      default: '',
-    },
-    // 这条文档生成时，该商品的xx数量
-    purSupplyDateQuery: {
-      type: Number,
-      required: true,
-      default: 0,
     },
     _goodsId: {
       type: Schema.Types.ObjectId,
       ref: 'Goods',
     },
   });
-  return model('PurchaseSupply', PurchaseSupplySchema);
+  return model('Profit', ProfitSchema);
 };

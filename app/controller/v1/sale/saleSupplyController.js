@@ -2,7 +2,7 @@
 
 const Controller = require('egg').Controller;
 
-class PurShipmentController extends Controller {
+class SaleSupplyController extends Controller {
   // 表单搜索， 返回搜索数据
   async index() {
     const indexRule = {
@@ -37,7 +37,7 @@ class PurShipmentController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(indexRule, ctx.request.body);
-    const params = !ctx.request.body.tableConf
+    const params = !ctx.request.body.hasOwnProperty('tableConf')
       ? Object.assign(ctx.request.body, {
         tableConf: {
           current: 1,
@@ -45,7 +45,7 @@ class PurShipmentController extends Controller {
         },
       })
       : ctx.request.body;
-    const res = ctx.service.v1.purShipmentService.index(params);
+    const res = ctx.service.v1.sale.saleSupplyService.index(params);
     const data = { list: res };
     if (res !== []) {
       ctx.status = 200;
@@ -107,7 +107,7 @@ class PurShipmentController extends Controller {
     ctx.validate(createRule, ctx.request.body);
     // const { ctx } = this;
     const params = ctx.request.body;
-    const res = await ctx.service.v1.purShipmentService.create(params);
+    const res = await ctx.service.v1.sale.saleSupplyService.create({...params, uData: ctx.state.tokenData});
     const data = { isSuccess: Boolean(res) };
     if (res !== 0) {
       ctx.status = 200;
@@ -162,7 +162,7 @@ class PurShipmentController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(updateRule, ctx.request.body);
-    const res = ctx.service.v1.purShipmentService.update(ctx.request.body);
+    const res = ctx.service.v1.sale.saleSupplyService.update({...ctx.request.body, uData: ctx.state.tokenData});
     const data = { isSuccess: res };
     if (res !== 0) {
       ctx.status = 200;
@@ -181,7 +181,7 @@ class PurShipmentController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(destroyRule, ctx.request.body);
-    const res = ctx.service.v1.purShipmentService.destroy(ctx.request.body);
+    const res = ctx.service.v1.sale.saleSupplyService.destroy({...ctx.request.body, uData: ctx.state.tokenData});
     const data = { isSuccess: Boolean(res) };
     if (res === 1) {
       ctx.status = 201;
@@ -193,4 +193,4 @@ class PurShipmentController extends Controller {
   }
 }
 
-module.exports = PurShipmentController;
+module.exports = SaleSupplyController;

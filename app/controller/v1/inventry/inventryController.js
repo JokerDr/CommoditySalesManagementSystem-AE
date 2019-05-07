@@ -30,20 +30,23 @@ class InventryController extends Controller {
         type: Number,
         required: false,
       },
-      supplier: {
-        type: String,
-        required: false,
-      },
-      // 执行人 (退货人)
-      execcutor: {
-        type: String,
+      tableConf: {
+        type: 'object',
         required: false,
       },
     };
     const { ctx } = this;
     ctx.validate(indexRule, ctx.request.body);
-    const res = ctx.service.v1.supplierService.index(ctx.request.body);
-    const data = { isSuccess: res };
+    const params = !ctx.request.body.hasOwnProperty('tableConf')
+      ? Object.assign(ctx.request.body, {
+        tableConf: {
+          current: 1,
+          pageSize: 10,
+        },
+      })
+      : ctx.request.body;
+    const res = ctx.service.v1.InventryController.index(params);
+    const data = { list: res };
     if (res !== 0) {
       ctx.status = 200;
       ctx.helper.HandleData(ctx, 1, 'ok', data);

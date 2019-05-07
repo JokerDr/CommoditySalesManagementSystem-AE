@@ -2,7 +2,20 @@
 
 const { Controller } = require('egg');
 
-class EnterPriceController extends Controller {
+class CustomerController extends Controller {
+//   获得供客户目录
+  async index() {
+    const { ctx } = this;
+    const res = await ctx.service.v1.personnel.customerService.index();
+    const data = { customers: res };
+    if (res !== []) {
+      ctx.status = 200;
+      ctx.helper.HandleData(ctx, 1, 'ok', data);
+    } else {
+      ctx.status = 400;
+      ctx.helper.HandleData(ctx, 0, 'false', res);
+    }
+  }
 
   // 新增记录
   async create() {
@@ -16,7 +29,11 @@ class EnterPriceController extends Controller {
         type: 'string',
         required: true,
       },
-      companyName: {
+      sex: {
+        type: 'string',
+        required: true,
+      },
+      duties: {
         type: 'string',
         required: true,
       },
@@ -24,10 +41,23 @@ class EnterPriceController extends Controller {
         type: 'number',
         required: true,
       },
+      tel: {
+        type: 'number',
+        required: true,
+      },
       email: {
         type: 'string',
         required: true,
       },
+      qqWechat: {
+        type: 'string',
+        required: true,
+      },
+      companyName: {
+        type: 'string',
+        required: true,
+      },
+
       fax: {
         type: 'number',
         required: true,
@@ -40,19 +70,7 @@ class EnterPriceController extends Controller {
         type: 'number',
         required: true,
       },
-      sex: {
-        type: 'string',
-        required: true,
-      },
-      duties: {
-        type: 'string',
-        required: true,
-      },
-      qqWechat: {
-        type: 'string',
-        required: true,
-      },
-      netAdress: {
+      netAddress: {
         type: 'string',
         required: true,
       },
@@ -69,7 +87,7 @@ class EnterPriceController extends Controller {
     ctx.validate(createRule, ctx.request.body);
     // const { ctx } = this;
     const params = ctx.request.body;
-    const res = await ctx.service.v1.enterPriceService.create(params);
+    const res = await ctx.service.v1.personnel.customerService.create(params);
     const data = { isSuccess: Boolean(res) };
     if (res !== 0) {
       ctx.status = 200;
@@ -90,10 +108,22 @@ class EnterPriceController extends Controller {
         type: 'number' || 'string',
         required: false,
       },
+      tableConf: {
+        type: 'object',
+        required: false,
+      },
     };
     const { ctx } = this;
+    const params = !ctx.request.body.hasOwnProperty('tableConf')
+      ? Object.assign(ctx.request.body, {
+        tableConf: {
+          current: 1,
+          pageSize: 10,
+        },
+      })
+      : ctx.request.body;
     ctx.validate(showRule, ctx.request.body);
-    const res = ctx.service.v1.enterPriceService.show(ctx.request.body);
+    const res = ctx.service.v1.personnel.customerService.show(params);
     const data = { isSuccess: res };
     if (res !== 0) {
       ctx.status = 200;
@@ -123,6 +153,10 @@ class EnterPriceController extends Controller {
         type: 'number',
         required: true,
       },
+      tel: {
+        type: 'number',
+        required: true,
+      },
       email: {
         type: 'string',
         required: true,
@@ -151,7 +185,7 @@ class EnterPriceController extends Controller {
         type: 'string',
         required: true,
       },
-      netAdress: {
+      netAddress: {
         type: 'string',
         required: true,
       },
@@ -166,7 +200,7 @@ class EnterPriceController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(updateRule, ctx.request.body);
-    const res = ctx.service.v1.enterPriceService.update(ctx.request.body);
+    const res = ctx.service.v1.personnel.customerService.update(ctx.request.body);
     const data = { isSuccess: res };
     if (res !== 0) {
       ctx.status = 200;
@@ -185,7 +219,7 @@ class EnterPriceController extends Controller {
     };
     const { ctx } = this;
     ctx.validate(destroyRule, ctx.request.body);
-    const res = ctx.service.v1.enterPriceService.destroy(ctx.request.body);
+    const res = ctx.service.v1.personnel.customerService.destroy(ctx.request.body);
     const data = { isSuccess: Boolean(res) };
     if (res === 1) {
       ctx.status = 201;
@@ -195,6 +229,7 @@ class EnterPriceController extends Controller {
       ctx.helper.HandleData(ctx, 0, 'failed', data);
     }
   }
+
 }
 
-module.exports = EnterPriceController;
+module.exports = CustomerController;

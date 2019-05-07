@@ -20,6 +20,10 @@ module.exports = app => {
       type: Number,
       required: true,
     },
+    tel: {
+      type: Number,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -48,7 +52,7 @@ module.exports = app => {
       type: String,
       required: true,
     },
-    netAdress: {
+    netAddress: {
       type: String,
       required: true,
     },

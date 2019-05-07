@@ -20,6 +20,11 @@ module.exports = app => {
       type: String,
       required: true,
     },
+    eeProfit: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
     _authorId: {
       // 主键
       type: Schema.Types.ObjectId,
